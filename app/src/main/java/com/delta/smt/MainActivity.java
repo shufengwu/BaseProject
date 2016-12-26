@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.delta.commonlibs.utils.IntentUtils;
 import com.delta.commonlibs.utils.ToastUtils;
@@ -13,16 +14,23 @@ import com.delta.smt.common.CommonBaseAdapter;
 import com.delta.smt.common.CommonViewHolder;
 import com.delta.smt.common.GridItemDecoration;
 import com.delta.smt.di.component.AppComponent;
+import com.delta.smt.entity.Update;
 import com.delta.smt.ui.brands.BrandListActivity;
+import com.delta.smt.ui.brands.di.BrandModule;
+import com.delta.smt.ui.brands.di.DaggerBrandComponent;
+import com.delta.smt.ui.main.di.DaggerMainComponent;
+import com.delta.smt.ui.main.di.MainModule;
+import com.delta.smt.ui.main.mvp.MainContract;
 import com.delta.smt.ui.main.mvp.MainPresenter;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
 
-public class MainActivity extends BaseActiviy<MainPresenter> implements CommonBaseAdapter.OnItemClickListener<String> {
+public class MainActivity extends BaseActiviy<MainPresenter> implements CommonBaseAdapter.OnItemClickListener<String>,MainContract.View {
 
 
     @BindView(R.id.toolbar)
@@ -33,8 +41,7 @@ public class MainActivity extends BaseActiviy<MainPresenter> implements CommonBa
 
     @Override
     protected void componentInject(AppComponent appComponent) {
-
-
+        DaggerMainComponent.builder().appComponent(appComponent).mainModule(new MainModule(this)).build().inject(this);
     }
 
     @Override
@@ -57,7 +64,7 @@ public class MainActivity extends BaseActiviy<MainPresenter> implements CommonBa
         rv.setAdapter(adapter);
         rv.addItemDecoration(new GridItemDecoration(this));
         adapter.setOnItemClickListener(this);
-
+        getPresenter().checkUpdate();
     }
 
     @Override
@@ -98,5 +105,15 @@ public class MainActivity extends BaseActiviy<MainPresenter> implements CommonBa
             default:
                 break;
         }
+    }
+
+    @Override
+    public void showExistUpdateDialog(Update update) {
+        try {
+            Toast.makeText(this,new String(update.getDescription().getBytes(),"gb2312"),Toast.LENGTH_SHORT).show();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(update.getDescription());
     }
 }

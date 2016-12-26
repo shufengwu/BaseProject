@@ -3,6 +3,7 @@ package com.delta.smt.api;
 
 import com.delta.smt.entity.Brands;
 import com.delta.smt.entity.LoginResult;
+import com.delta.smt.entity.Update;
 import com.delta.smt.entity.User;
 
 import java.util.Map;
@@ -24,4 +25,7 @@ public interface ApiService {
     @GET("v2/items")
     Observable<Brands> getBrands(@QueryMap Map<String, String> map);
 
+    //Shufeng.Wu Update
+    @GET("http://172.22.35.177:8081/update.json")
+    Observable<Update> getUpdate();
 }
