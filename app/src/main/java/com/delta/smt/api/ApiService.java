@@ -8,10 +8,13 @@ import com.delta.smt.entity.User;
 
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 import rx.Observable;
 
 
@@ -28,4 +31,6 @@ public interface ApiService {
     //Shufeng.Wu Update
     @GET("http://172.22.35.177:8081/update.json")
     Observable<Update> getUpdate();
+
+
 }

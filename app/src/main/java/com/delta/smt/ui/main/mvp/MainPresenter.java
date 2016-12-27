@@ -4,8 +4,12 @@ import com.delta.commonlibs.base.mvp.BasePresenter;
 import com.delta.commonlibs.di.scope.ActivityScope;
 import com.delta.smt.entity.Update;
 
+import java.io.InputStream;
+
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
+import rx.Subscriber;
 import rx.functions.Action1;
 
 /**
@@ -33,6 +37,26 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
             @Override
             public void call(Throwable throwable) {
 
+            }
+        });
+    }
+
+    public void download(String urlStr){
+        long fileSize;
+        getModel().download(urlStr, new Subscriber() {
+            @Override
+            public void onCompleted() {
+                getView().downloadCompleted();
+                System.out.println("getView().downloadCompleted()");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Object o) {
             }
         });
     }
