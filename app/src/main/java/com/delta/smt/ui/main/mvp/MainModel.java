@@ -8,6 +8,7 @@ import com.delta.smt.api.DownloadService;
 import com.delta.smt.base.BaseModel;
 import com.delta.smt.entity.Update;
 import com.delta.smt.ui.main.utils.FileUtils;
+import com.delta.smt.ui.main.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class MainModel extends BaseModel<ApiService> implements MainContract.Mod
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getHostName("http://172.22.35.177:8081/app-debug.apk"))
+                .baseUrl(StringUtils.getHostName("http://172.22.35.177:8081/app-debug.apk"))
                 .client(client)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
@@ -84,19 +85,5 @@ public class MainModel extends BaseModel<ApiService> implements MainContract.Mod
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
-    }
-
-    public static String getHostName(String urlString) {
-        String head = "";
-        int index = urlString.indexOf("://");
-        if (index != -1) {
-            head = urlString.substring(0, index + 3);
-            urlString = urlString.substring(index + 3);
-        }
-        index = urlString.indexOf("/");
-        if (index != -1) {
-            urlString = urlString.substring(0, index + 1);
-        }
-        return head + urlString;
     }
 }

@@ -24,7 +24,7 @@ public class FileUtils {
             file.delete();
 
         FileOutputStream out = new FileOutputStream(file);
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[1024*128];
         int len = -1;
         while ((len = in.read(buffer)) != -1) {
             out.write(buffer, 0, len);

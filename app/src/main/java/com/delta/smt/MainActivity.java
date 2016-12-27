@@ -1,22 +1,16 @@
 package com.delta.smt;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.delta.commonlibs.utils.IntentUtils;
 import com.delta.commonlibs.utils.ToastUtils;
@@ -27,19 +21,13 @@ import com.delta.smt.common.GridItemDecoration;
 import com.delta.smt.di.component.AppComponent;
 import com.delta.smt.entity.Update;
 import com.delta.smt.ui.brands.BrandListActivity;
-import com.delta.smt.ui.brands.di.BrandModule;
-import com.delta.smt.ui.brands.di.DaggerBrandComponent;
 import com.delta.smt.ui.main.MyDownloadService;
 import com.delta.smt.ui.main.di.DaggerMainComponent;
 import com.delta.smt.ui.main.di.MainModule;
 import com.delta.smt.ui.main.mvp.MainContract;
 import com.delta.smt.ui.main.mvp.MainPresenter;
 import com.delta.smt.ui.main.utils.PkgInfoUtils;
-import com.delta.smt.ui.main.utils.ProgressUiUtils;
-import com.squareup.haha.perflib.Main;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +46,7 @@ public class MainActivity extends BaseActiviy<MainPresenter> implements CommonBa
     //Shufeng.Wu Update
     private long fileSize = 0;
     MyHandler myHandler = new MyHandler(this);
+
 
     @Override
     protected void componentInject(AppComponent appComponent) {
@@ -128,7 +117,7 @@ public class MainActivity extends BaseActiviy<MainPresenter> implements CommonBa
     }
 
     @Override
-    public void showExistUpdateDialog(Update update) {
+    public void showExistUpdateDialog(final Update update) {
 
         if (Integer.parseInt(update.getVersionCode()) > PkgInfoUtils.getVersionCode(MainActivity.this)) {
             String message_wifi = "当前版本为:" + PkgInfoUtils.getVersionName(this) + " Code:" + PkgInfoUtils.getVersionCode(this)
@@ -150,6 +139,7 @@ public class MainActivity extends BaseActiviy<MainPresenter> implements CommonBa
 
                             //getPresenter().download("http://172.22.35.177:8081/app-debug.apk");
                             Intent intent = new Intent(MainActivity.this, MyDownloadService.class);
+                            intent.putExtra("urlStr", update.getUrl());
                             startService(intent);
                             dialogInterface.dismiss();
                         }
